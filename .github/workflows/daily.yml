@@ -1,0 +1,31 @@
+name: Daily UpGrad CRM availability
+
+on:
+  schedule:
+    # 12:05 AM Asia/Kolkata = 18:35 UTC on the previous day.
+    - cron: '35 18 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-availability:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+
+      - name: Update CRM availability
+        env:
+          CRM_EMAIL: ${{ secrets.CRM_EMAIL }}
+          CRM_PASSWORD: ${{ secrets.CRM_PASSWORD }}
+        run: node crm_availability.mjs
