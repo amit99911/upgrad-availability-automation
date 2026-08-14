@@ -29,25 +29,3 @@ jobs:
           CRM_EMAIL: ${{ secrets.UPGRAD_EMAIL }}
           CRM_PASSWORD: ${{ secrets.UPGRAD_PASSWORD }}
         run: node crm_availability.mjs
-
-      - name: Notify Telegram success
-        if: ${{ success() }}
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: |
-          curl --fail --silent --show-error --request POST \
-            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
-            --data-urlencode "text=UpGrad CRM availability completed successfully. Run: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
-            "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"
-
-      - name: Notify Telegram failure
-        if: ${{ failure() }}
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-        run: |
-          curl --fail --silent --show-error --request POST \
-            --data-urlencode "chat_id=${TELEGRAM_CHAT_ID}" \
-            --data-urlencode "text=UpGrad CRM availability FAILED. Check run: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
-            "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"
