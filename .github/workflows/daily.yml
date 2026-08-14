@@ -26,6 +26,6 @@ jobs:
 
       - name: Update CRM availability
         env:
-          CRM_EMAIL: ${{ secrets.CRM_EMAIL }}
-          CRM_PASSWORD: ${{ secrets.CRM_PASSWORD }}
+          CRM_EMAIL: ${{ secrets.UPGRAD_EMAIL }}
+          CRM_PASSWORD: ${{ secrets.UPGRAD_PASSWORD }}
         run: node crm_availability.mjs
